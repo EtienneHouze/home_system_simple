@@ -3,6 +3,8 @@ from copy import copy
 class System:
     """
         This class describes the system (house). It should interact only with the lower-level actuators and sensors.
+        Fields:
+            _current_temp : the inside temperature of the house
     """
 
     _current_temp = 23

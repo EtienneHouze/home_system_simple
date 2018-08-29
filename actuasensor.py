@@ -1,5 +1,5 @@
-from simple_system.component import Component
-from simple_system.system import System
+from component import Component
+from system import System
 
 
 class ActuaSensor(Component):
@@ -15,11 +15,11 @@ class ActuaSensor(Component):
         if "parents" in kwargs.keys():
             parents = kwargs["parents"]
         else:
-            parents = []
+            parents = {}
         if "children" in kwargs.keys():
             children = kwargs["children"]
         else:
-            children = []
+            children = {}
         if "id" in kwargs.keys():
             id = kwargs["id"]
         super().__init__(children=children,parents=parents,id=id)

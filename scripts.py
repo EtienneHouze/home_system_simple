@@ -5,11 +5,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import time
 
-from simple_system.component import Component
-from simple_system.system import System
-from simple_system.actuasensor import ActuaSensor
-from simple_system.control_system import ControlSystem
-from simple_system.ai_system import AISystem
+from component import Component
+from system import System
+from actuasensor import ActuaSensor
+from control_system import ControlSystem
+from ai_system import AISystem
 
 
 #   We create three classes to implement each component
@@ -63,15 +63,17 @@ class Heater(ActuaSensor):
         elif len(self.in_goal) == 0:
             self.system.set_temp(15)
             self.out_feedback = 0
-        elif self.in_goal[0] is None:
-            self.system.set_temp(15)
-            self.out_feedback = 0
-        elif self.in_goal[0] > 0:  # heat the room
-            self.system.set_temp(23)
-            self.out_feedback = 1
         else:
-            self.system.set_temp(15)
-            self.out_feedback = 0
+            for key in self.in_goal.keys():
+                if self.in_goal[key] is None:
+                    self.system.set_temp(15)
+                    self.out_feedback = 0
+                elif self.in_goal[key] > 0:  # heat the room
+                    self.system.set_temp(23)
+                    self.out_feedback = 1
+                else:
+                    self.system.set_temp(15)
+                    self.out_feedback = 0
         self.out_feedback = [self.out_feedback]
 
 
@@ -129,17 +131,12 @@ class Controller(Component):
             pass
         elif len(self.in_goal) == 0:
             pass
-        elif self.in_goal[0] > 0:
-            self.out_goal = 1
         else:
-            self.out_goal = 0
-        # process the feedbacks from below
-        if len(self.in_feedback) == 0:
-            pass
-        else:
-            for i in range(len(self.in_feedback)):
-                #print("feedback for " + str(self._children[i].get_id()) + " is " + str(self.in_feedback[i]))
-                pass
+            for key in self.in_goal.keys():
+                if self.in_goal[key] > 0:
+                    self.out_goal = 1
+                else:
+                    self.out_goal = 0
 
 
 #   A method to build a system with a controller, two thermometers and a heater
@@ -149,16 +146,18 @@ def build_system():
     t2 = Thermometer(system=house, delta=0.1)
     h = Heater(system=house)
     test = Controller()
-    test._parents = []
-    test._children = []
-    test.add_child(t1)
-    test.add_child(t2)
-    h.add_parent(test)
+
     system = ControlSystem()
     t1.add_to_ctrl_system(system)
     t2.add_to_ctrl_system(system)
     test.add_to_ctrl_system(system)
     h.add_to_ctrl_system(system)
+
+    test._parents = {}
+    test._children = {}
+    test.add_child(t1)
+    test.add_child(t2)
+    h.add_parent(test)
     system.find_root()
     return system
 

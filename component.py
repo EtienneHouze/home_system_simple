@@ -1,7 +1,7 @@
-from simple_system.ai_system import AISystem
+from ai_system import AISystem
 
 class Component:
-
+    # TODO changing lists to dicts for inputs
 
     _id = -1                # id should be unique
 
@@ -36,21 +36,27 @@ class Component:
         if parents is not None:
             self._parents = parents
         self._id = id
-        self.in_feedback = []
-        self.in_goal = []
+        self.in_feedback = {}
+        self.in_goal = {}
         self.out_feedback = []
         self.out_goal = []
         self.ai_system = AISystem()
 
     def run(self):
-        self.in_feedback = []
+        self.in_feedback = {}
         if len(self._parents) > 0:
-            self.in_goal = []
-        for parent in self._parents:
-            self.in_goal.append(parent.out_goal)
-        for child in self._children:
-            self.in_feedback.append(child.out_feedback)
-        self.ai_system.feed_inputs([self.in_goal, self.in_feedback])
+            self.in_goal = {}
+        for parent_id in self._parents.keys():
+            self.in_goal[parent_id] = self._parents[parent_id].out_goal
+        for child_id in self._children.keys():
+            self.in_feedback[child_id] = self._children[child_id].out_feedback
+        goals_list = []
+        for key in self.in_goal.keys():
+            goals_list.append(self.in_goal[key])
+        feeds_list = []
+        for key in self.in_feedback.keys():
+            feeds_list.append(self.in_feedback[key])
+        self.ai_system.feed_inputs([goals_list, feeds_list])
         self.function()
         self.ai_system.think()
         self.out_ai = self.ai_system.get_outputs()
@@ -71,14 +77,14 @@ class Component:
         :param parent: Component object
         :return:
         """
-        if parent not in self._parents:
-            self._parents.append(parent)
-            parent._children.append(self)
+        if parent.get_id() not in self._parents.keys():
+            self._parents[parent.get_id()] = parent
+            parent._children[self.get_id()] = self
 
     def add_child(self,child):
-        if child not in self._children:
-            self._children.append(child)
-            child._parents.append(self)
+        if child.get_id() not in self._children.keys():
+            self._children[child.get_id()] = child
+            child._parents[self.get_id()] = self
 
     def __str__(self):
         children_str = ""

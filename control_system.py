@@ -19,11 +19,12 @@ class ControlSystem:
                 self.root = self.components[key]
 
     def run(self, in_system):
-        self.root.in_goal = [in_system]
+        self.root.in_goal[-3] = in_system
         to_run = [self.root]
         while len(to_run) > 0:
             new_run = []
             for component in to_run:
-                new_run.extend(component._children)
+                for child_id in component._children.keys():
+                    new_run.append(component._children[child_id])
                 component.run()
             to_run = copy(new_run)
