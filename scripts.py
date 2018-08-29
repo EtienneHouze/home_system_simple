@@ -14,9 +14,19 @@ from ai_system import AISystem
 
 #   We create three classes to implement each component
 class Thermometer(ActuaSensor):
+    """
+    Thermometers are sensors. They do nothing but send a feedback [current temperature, delta temp], where
+    "delta temp" is the difference between the two most recent measures.
+    All measures are from a gaussian distribution with mean the room temperature and std dev. the delta
+    parameter of the object.
+
+    For every timestep, a thermometer has a chance _fail_chance to fail, yielding thereafter a random positive value
+    ( drawn from a truncated gaussian distrib with very high stddev)
+    """
     delta = 1
     is_working = True
     temp_mem = -1
+    _fail_chance = 0.1
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -26,7 +36,7 @@ class Thermometer(ActuaSensor):
     # Overriding of the function
     def function(self):
         coinflip = np.random.uniform()
-        if coinflip > 0.99:
+        if coinflip > 1 - self._fail_chance:
             self.is_working = not self.is_working
         if self.is_working:
             new_temp = np.random.normal(self.system.get_temp(), self.delta, 1)
@@ -36,7 +46,6 @@ class Thermometer(ActuaSensor):
             new_temp = max(0,np.random.normal(self.system.get_temp(), 200, 1))
             self.out_feedback = [new_temp, self.temp_mem - new_temp]
             self.temp_mem = new_temp
-        # TODO : case where the component is not working properly
 
 
 class Heater(ActuaSensor):
@@ -84,6 +93,7 @@ class Controller(Component):
 
     class ControllerAi(AISystem):
         # The inputs of this module are [in_goals, in_feedback] of the controller
+        # TODO Work how inputs are passe to the AI as dictionnaries
 
         def __init__(self):
             super().__init__()
@@ -168,7 +178,7 @@ def main():
     hour = 0
     i = 0
 
-    while i < 200:
+    while True:
         user_will = [1] * 24
         system.run(user_will[hour])
         i += 1
