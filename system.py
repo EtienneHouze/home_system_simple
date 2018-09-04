@@ -13,7 +13,18 @@ class System:
         pass
 
     def get_temp(self):
+        """
+        :return: The current temperature of the room
+        """
         return copy(self._current_temp)
 
     def set_temp(self,temp):
-        self._current_temp = temp
+        """
+        Sets the temperature of the room
+        :param temp: a number (float or int)
+        :return: nothing
+        """
+        if not (isinstance(temp,float) or isinstance(temp,int)):
+            print("Temp should be a number, float or int")
+        else:
+            self._current_temp = temp

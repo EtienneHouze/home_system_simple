@@ -1,8 +1,22 @@
-class Component:
+from copy import copy
 
+
+class Component:
+    """
+    The component class is as generic as possible. It encompasses the totpology of a network, each component
+    having reference to its parents and children.
+    It can also communicate to other components, reading from a buffer in.
+    :attributes
+        _id = the unique id of the component
+        _children : a dictionary {int:Component} of the children, linking ids to the components
+        _parents : a dictionary {int:Component} of the children, linking ids to the components
+        _buffer_in : the buffer for inputs coming to this component
+    """
     _id = -1
     _children = None
     _parents = None
+    _buffer_in = None
+    _buffer_out = None
 
 
 
@@ -21,3 +35,49 @@ class Component:
 
     def get_id(self):
         return self._id
+
+    def get_children_list(self):
+        """
+        :return: the children of the component, as a list
+        """
+        ret = []
+        for key in self._children.keys():
+            ret.append(self._children[key])
+        return ret
+
+
+    def add_parent(self, parent):
+        """
+        Adds a parent to the component
+        :param parent:
+        :return:
+        """
+        if not isinstance(parent, Component):
+            raise TypeError("This methods expects a Component, not a " + type(parent).__name__)
+        if parent.get_id() not in self._parents.keys():
+            self._parents[parent.get_id()] = parent
+            parent._children[self._id] = self
+        else:
+            print ("This component is already a parent.")
+
+    def run(self):
+        """
+        Thi methods is launched at each tick, and should run all the logic of the component
+        :return:
+        """
+
+    def get_feedback(self):
+        """
+        Returns a copy of the feedbacks from this component
+        :return:
+        """
+        return copy(self._buffer_out)
+
+    def gather_goals(self):
+        """
+        This method gathers the goals from above
+        :return: a list of all the goals
+        """
+        goals = []
+        for key in self._parents.keys():
+            goals.append(self._parents[key].get_out_goal())
