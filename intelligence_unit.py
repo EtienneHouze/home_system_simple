@@ -3,7 +3,11 @@
 class IntelligenceUnit:
     """
     An abstract class describing an intelligence unit
+    In principle, the intelligence unit should be able to think, that means to describe the situation with
+    words and to detect an out of ordinary situation.
     """
+    # TODO : see how to deal with this class. For instance, what should be done here, only description of what
+    # is happening, or also the abduction ?
 
     _inputs = None
     _outputs = None

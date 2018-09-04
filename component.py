@@ -78,6 +78,7 @@ class Component:
         This method gathers the goals from above
         :return: a list of all the goals
         """
-        goals = []
+        goals = {}
         for key in self._parents.keys():
-            goals.append(self._parents[key].get_out_goal())
+            goals[key] = self._parents[key].get_out_goal()
+        return goals
