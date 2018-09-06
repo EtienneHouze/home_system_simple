@@ -48,7 +48,7 @@ class Component:
 
     def add_parent(self, parent):
         """
-        Adds a parent to the component
+        Adds a parent to the component, and updates the children of the parent.
         :param parent:
         :return:
         """
@@ -65,6 +65,7 @@ class Component:
         Thi methods is launched at each tick, and should run all the logic of the component
         :return:
         """
+        pass
 
     def get_feedback(self):
         """
@@ -82,3 +83,6 @@ class Component:
         for key in self._parents.keys():
             goals[key] = self._parents[key].get_out_goal()
         return goals
+
+    def __str__(self):
+        return "( " + type(self).__name__ + ", id = " + str(self._id) + " )"

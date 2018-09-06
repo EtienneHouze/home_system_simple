@@ -14,7 +14,7 @@ class AutonomicComponent(Component):
     def __init__(self):
         super().__init__()
 
-    def compute_goals(self):
+    def compute_goals(self, inputs):
         """
         This method should update the _buffer_goal_out variable.
         :return:

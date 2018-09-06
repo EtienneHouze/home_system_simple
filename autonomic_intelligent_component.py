@@ -10,3 +10,17 @@ class AutonomicIntelligentComponent(IntelligenceUnit, AutonomicComponent):
 
     def __init__(self, *args, **kwargs):
         pass
+
+    def run(self):
+        in_goals = self.gather_goals()
+        self.compute_goals(in_goals)
+        self.feed_inputs(self.gather_in_feedbacks())
+        self.think()
+        if self._ai_outputs == 0:
+            # in this case it doesn't work
+            pass
+        else:
+            # in this case it does
+            pass
+
+

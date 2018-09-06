@@ -1,6 +1,9 @@
+from user_interface import UserInterface
+
 
 def main():
-    print("Hello World !")
+    UI = UserInterface()
+    UI.discuss()
 
 
 if __name__ == '__main__':

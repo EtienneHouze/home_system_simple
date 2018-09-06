@@ -16,4 +16,8 @@ class CANModule:
         :param component: (Component)
         :return:
         """
-        pass
+        try:
+            return component.abduction()
+        except AttributeError as e:
+            print(e.__traceback__,e.args)
+            print("The component has no penetrability")
