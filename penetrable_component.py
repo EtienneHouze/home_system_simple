@@ -39,7 +39,7 @@ class PenetrableComponent(Component):
             else:
                 return None, None
         else:
-            # We recursively run the abduction to the children to see when they failed, and we later report the earliest
+            # We recursively run the abduction on the children to see when they failed, and we later report the earliest
             # detected failure.
             time_of_failure = None
             failing_component = None

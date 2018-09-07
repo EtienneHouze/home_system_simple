@@ -30,6 +30,8 @@ class Component:
         """
         if len(args) > 0:
             self._id = args[0]
+        else:
+            print("No id provided, things might go wrong.")
         self._parents = kwargs.get("parents", {})
         self._children = kwargs.get("children", {})
 

@@ -1,4 +1,7 @@
 from autonomic_intelligent_component import AutonomicIntelligentComponent
+from penetrable_component import PenetrableComponent
+
+import numpy as np
 
 
 class Controller(AutonomicIntelligentComponent):
@@ -28,3 +31,26 @@ class Controller(AutonomicIntelligentComponent):
 
     def think(self):
         pass
+
+
+class Thermometer(PenetrableComponent):
+    """
+    Description of a thermometer
+    """
+    _house = None
+    _deviation = 1.0
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if "house" in kwargs.keys():
+            self._house = kwargs["house"]
+        else:
+            print("No house provided, behaviour will not be correct")
+        self._deviation = kwargs.get("dev",1.0)
+
+    def report_temperature(self):
+        return np.random.normal(self._house.get_temp(),self._deviation)
+
+    def run(self):
+        self._buffer_out = self.report_temperature()
+

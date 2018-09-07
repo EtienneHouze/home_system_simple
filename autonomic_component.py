@@ -13,6 +13,7 @@ class AutonomicComponent(Component):
 
     def __init__(self):
         super().__init__()
+        print("Bonjour")
 
     def compute_goals(self, inputs):
         """

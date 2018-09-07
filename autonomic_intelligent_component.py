@@ -1,15 +1,18 @@
 from intelligence_unit import IntelligenceUnit
 from autonomic_component import AutonomicComponent
+from penetrable_component import PenetrableComponent
 
 
-class AutonomicIntelligentComponent(IntelligenceUnit, AutonomicComponent):
+class AutonomicIntelligentComponent(IntelligenceUnit, AutonomicComponent, PenetrableComponent):
     """
     This component is an intelligent controller capable of explaining what is wrong and
     performing reasoning to detect the malfunctioning child.
     """
 
     def __init__(self, *args, **kwargs):
-        pass
+        AutonomicComponent.__init__(self)
+        IntelligenceUnit.__init__(self)
+        PenetrableComponent.__init__(self)
 
     def run(self):
         in_goals = self.gather_goals()
