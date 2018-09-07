@@ -7,7 +7,7 @@ import numpy as np
 class Controller(AutonomicIntelligentComponent):
 
     def __init__(self,*args,**kwargs):
-        super().__init__(args,kwargs)
+        super().__init__(*args,**kwargs)
 
     def compute_goals(self):
         """
@@ -28,9 +28,28 @@ class Controller(AutonomicIntelligentComponent):
 
     def run(self):
         self.compute_goals()
+        feedbacks = self.gather_in_feedbacks()
+        self.feed_inputs(feedbacks)
+        self.think()
+        if self._outputs > 0:
+            return 1
 
     def think(self):
-        pass
+        self._outputs = 0
+        temps_report = []
+        for key in self._inputs.keys():
+            if self._inputs[key] is not None:
+                temps_report.append(self._inputs[key])
+        for temp in temps_report:
+            if temp < 15:
+                self._description = "Too cold"
+                self._outputs = 1
+            if temp > 28:
+                self._description = "Too hot"
+                self._outputs = 1
+        if self._outputs != 0:
+            return
+        self._outputs = 0
 
 
 class Thermometer(PenetrableComponent):
@@ -52,5 +71,45 @@ class Thermometer(PenetrableComponent):
         return np.random.normal(self._house.get_temp(),self._deviation)
 
     def run(self):
-        self._buffer_out = self.report_temperature()
+        if self.is_working:
+            self._buffer_out = self.report_temperature()
+        else:
+            # return a totally random value if the thermometer is not working
+            return np.random.normal(20,300)
 
+
+
+
+class Heater(PenetrableComponent):
+    """
+    Description of a heater
+    """
+    _house = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args,**kwargs)
+        if "house" in kwargs.keys():
+            self._house = kwargs["house"]
+        else:
+            print("No house provided, behaviour will no be correct")
+
+    def heat(self):
+        if self._house.get_temp() < 25:
+            self._house.set_temp(self._house.get_temp() + 1)
+
+    def cool(self):
+        self._house.set_temp(self._house.get_temp() - 1)
+
+
+    def run(self):
+        # The heater heats the room if it is working and is asked to heat (goal == 1)
+        if self.is_working:
+            goals = self.gather_goals()
+            if len(goals) == 0:
+                self.cool()
+            elif goals[0] > 0:
+                self.heat()
+            else:
+                self.cool()
+        else:
+            self.cool()

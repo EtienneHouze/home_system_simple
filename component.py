@@ -35,6 +35,7 @@ class Component:
         self._parents = kwargs.get("parents", {})
         self._children = kwargs.get("children", {})
 
+
     def get_id(self):
         return self._id
 
@@ -86,5 +87,12 @@ class Component:
             goals[key] = self._parents[key].get_out_goal()
         return goals
 
+    def get_parents_number(self):
+        return len(self._parents)
+
     def __str__(self):
         return "( " + type(self).__name__ + ", id = " + str(self._id) + " )"
+
+    def __repr__(self):
+        # I know this is not very Pythonic but I don't care.
+        return str(self)

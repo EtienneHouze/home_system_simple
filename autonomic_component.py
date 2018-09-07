@@ -11,9 +11,8 @@ class AutonomicComponent(Component):
 
     _buffer_goal_out = None
 
-    def __init__(self):
-        super().__init__()
-        print("Bonjour")
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
 
     def compute_goals(self, inputs):
         """

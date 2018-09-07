@@ -19,6 +19,14 @@ class PenetrableComponent(Component):
         self.is_working = True
         self.failure_time_stamp = -1
 
+    def malfunction(self, time):
+        self.is_working = False
+        self.failure_time_stamp = time
+
+    def repair(self):
+        self.is_working = True
+        self.failure_time_stamp = -1
+
     def abduction(self):
         """
         This method performs the abduction

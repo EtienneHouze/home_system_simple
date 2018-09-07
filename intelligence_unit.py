@@ -19,7 +19,7 @@ class IntelligenceUnit:
     _outputs = None
     _description = ""
 
-    def __init__(self):
+    def __init__(self,*args,**kwargs):
         self._description = "Nothing to explain"
 
     def feed_inputs(self, inputs):

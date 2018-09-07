@@ -10,9 +10,9 @@ class AutonomicIntelligentComponent(IntelligenceUnit, AutonomicComponent, Penetr
     """
 
     def __init__(self, *args, **kwargs):
-        AutonomicComponent.__init__(self)
-        IntelligenceUnit.__init__(self)
-        PenetrableComponent.__init__(self)
+        AutonomicComponent.__init__(self,*args,**kwargs)
+        IntelligenceUnit.__init__(self,*args,**kwargs)
+        PenetrableComponent.__init__(self,*args,**kwargs)
 
     def run(self):
         in_goals = self.gather_goals()
