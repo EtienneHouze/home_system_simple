@@ -1,12 +1,15 @@
 from control_system import ControlSystem
 from controller_impl import Controller, Thermometer, Heater
 
+import time
+
 
 class UserInterface:
     def __init__(self):
         pass
 
     def discuss(self):
+        # This is kinda the main method of this program.
         print("Welcome to the Hello program")
         control_system = ControlSystem()
         control_system.set_temp(21)
@@ -24,3 +27,5 @@ class UserInterface:
                 heater.malfunction(5)
             print("Step number :"+ str(t_step))
             print("temperature " + str(control_system.get_temp()))
+            print("-------------------------")
+            time.sleep(0.1)
