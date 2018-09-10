@@ -1,9 +1,9 @@
 from system import System
-from component import Component
-from autonomic_component import AutonomicComponent
+from components import Component, AutonomicComponent
 from can_module import CANModule
 
 from copy import copy
+
 
 class ControlSystem(System, CANModule):
     """

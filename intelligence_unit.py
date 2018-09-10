@@ -8,7 +8,7 @@ class IntelligenceUnit:
 
     :Attributes:
         - _inputs : # TODO which data type ?
-        - _outputs : # The output should just be a boolean, posing if everything is nominal or not.
+        - _ai_outputs : # The output should just be a boolean, posing if everything is nominal or not.
         - _description : a string produced by the AI component. It can be used by outer components to describe what
             is going on here.
     """
@@ -16,7 +16,7 @@ class IntelligenceUnit:
     # is happening, or also the abduction ?
 
     _inputs = None
-    _outputs = None
+    _ai_outputs = None
     _description = ""
 
     def __init__(self,*args,**kwargs):
@@ -34,7 +34,7 @@ class IntelligenceUnit:
         """
         This method should be called when the AI works on inputs to produces its outputs,
         for instance finding outlying values.
-        This method should fill in both the _description and the _outputs attributes.
+        This method should fill in both the _description and the _ai_outputs attributes.
         :return:
         """
         pass

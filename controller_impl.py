@@ -1,5 +1,4 @@
-from autonomic_intelligent_component import AutonomicIntelligentComponent
-from penetrable_component import PenetrableComponent
+from components import AutonomicIntelligentComponent, PenetrableComponent
 
 import numpy as np
 
@@ -31,11 +30,11 @@ class Controller(AutonomicIntelligentComponent):
         feedbacks = self.gather_in_feedbacks()
         self.feed_inputs(feedbacks)
         self.think()
-        if self._outputs > 0:
+        if self._ai_outputs > 0:
             return 1
 
     def think(self):
-        self._outputs = 0
+        self._ai_outputs = 0
         temps_report = []
         for key in self._inputs.keys():
             if self._inputs[key] is not None:
@@ -43,13 +42,13 @@ class Controller(AutonomicIntelligentComponent):
         for temp in temps_report:
             if temp < 15:
                 self._description = "Too cold"
-                self._outputs = 1
+                self._ai_outputs = 1
             if temp > 28:
                 self._description = "Too hot"
-                self._outputs = 1
-        if self._outputs != 0:
+                self._ai_outputs = 1
+        if self._ai_outputs != 0:
             return
-        self._outputs = 0
+        self._ai_outputs = 0
 
 
 class Thermometer(PenetrableComponent):
@@ -72,7 +71,7 @@ class Thermometer(PenetrableComponent):
 
     def run(self):
         if self.is_working:
-            self._buffer_out = self.report_temperature()
+            self._buffer_out_feedback = self.report_temperature()
         else:
             # return a totally random value if the thermometer is not working
             return np.random.normal(20,300)
