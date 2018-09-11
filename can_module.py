@@ -1,3 +1,4 @@
+from logic import Theory
 
 
 class CANModule:
@@ -7,6 +8,9 @@ class CANModule:
         - this module should be the only one in the system that can interact with the user
         to avoid a situation where every component tries to report activities to the user.
     """
+
+    rules_set = Theory()
+
     def __init__(self):
         pass
 
