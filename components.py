@@ -1,6 +1,7 @@
 from copy import copy
 import operator
 from intelligence_unit import IntelligenceUnit
+from logic import Predicate
 
 
 
@@ -111,11 +112,13 @@ class PenetrableComponent(Component):
     """
     is_working = None
     failure_time_stamp = -1
+    _associated_predicates = {}
 
     def __init__(self,*args, **kwargs):
         super().__init__(*args,**kwargs)
         self.is_working = True
         self.failure_time_stamp = -1
+        self._associated_predicates = {}
 
     def malfunction(self, time):
         self.is_working = False
