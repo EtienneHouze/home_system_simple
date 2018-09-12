@@ -20,12 +20,30 @@ class CANModule(Theory,Representation):
         Representation.__init__(self,*args,**kwargs)
 
 
-    def solve_conflict(self):
-        all_conflicts = {}
+    def solve_conflicts(self):
+        """
+        Solves the possible conflicts arising in the logical world.
+        """
+        main_conflict = None    # Pointer to the predicate with the most important conflict
+        max_value = 0
         for pred in self._set_of_predicates:
             if (
                 (pred.is_realized() and pred.get_value() < 0) 
                 or ((not pred.is_realized()) and pred.get_value() > 0)
                 ):
-                all_conflicts[pred] = pred.get_value()
-        
+                if abs(pred.get_value()) > max_value:
+                    main_conflict = pred
+                    max_value = pred.get_value()
+        if max_value is None:
+            # do nothign if there is no conlict
+            return
+        while main_conflict is not None:
+            # While we propagate the conflict to its possible causes
+            for rule in self._set_of_rules:
+                if main_conflict in rule.get_consequences():
+                    possible_causes = rule.get_premises()
+                    max_value = 0
+                    for premise in rule.get_premises():
+                        if ((premise.is_realized() and premise.get_value() < 0)
+                            or ((not premise.is_realized()) and premise.get_value() > 0):
+                            pass

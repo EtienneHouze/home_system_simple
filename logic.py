@@ -42,6 +42,14 @@ class Rule:
 
     def __init__(self, *args, **kwargs):
         pass
+    
+    def get_consequences(self):
+        # TODO should return a list of the consequences of the rule.
+        pass
+    
+    def get_premises(self):
+        # TODO should return a list of the causes of the rule
+        pass
 
 
 class Theory:
